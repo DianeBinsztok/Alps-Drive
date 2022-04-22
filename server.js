@@ -9,40 +9,25 @@ const port = 3000;
 // le serveur envoie la première vue statique
 app.use(express.static("frontend"));
 app.use(cors());
-console.log("Le module CORS, c'est ça -> ", cors);
 
-/*app.get("/", (req, res) => {
-  res.send("Welcome");
-});*/
+// Mes dossiers:
+const targetPath = "./randomFolders";
+
+// Les fonctions pour aller chercher le contenu de randomFolders
+function getAllContent(contentPath) {
+  fs.readdir(contentPath, (error, result) => {
+    if (error) {
+      console.error("readdir n'a pas fonctionné : ", error);
+    } else {
+      console.log("Je suis sensée recevoir des dossiers : ", result);
+    }
+  }).then((files) => {
+    console.log(files);
+  });
+}
+
 app.get("/api/drive", (req, res) => {
-  res.send([
-    {
-      name: "Personnel",
-      isFolder: true,
-    },
-    {
-      name: "avis imposition",
-      size: 1337,
-      isFolder: false,
-    },
-  ]);
-});
-
-app.post("/:name", (req, res) => {
-  const foldername = req.params.name;
-  if (!foldername) {
-    res.end();
-  } else {
-    fs.mkdir(foldername)
-      .then(() => {
-        console.log("Y'a ça dans foldername -> ", foldername);
-        res.sendStatus(201);
-      })
-      .catch((error) => {
-        console.error("La création du dossier a échoué: ", error);
-        res.sendStatus(500);
-      });
-  }
+  getAllContent(targetPath);
 });
 
 app.listen(port, () => {
