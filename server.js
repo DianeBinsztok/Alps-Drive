@@ -15,14 +15,18 @@ const targetPath = "./randomFolders";
 
 // Les fonctions pour aller chercher le contenu de randomFolders
 function getAllContent(contentPath) {
-  fs.readdir(contentPath, (error, result) => {
+  fs.readdir(contentPath, { withFileTypes: true }, (error, result) => {
     if (error) {
       console.error("readdir n'a pas fonctionné : ", error);
     } else {
       console.log("Je suis sensée recevoir des dossiers : ", result);
     }
+    return result;
   }).then((files) => {
     console.log(files);
+    files.map((file) => {
+      console.log(file);
+    });
   });
 }
 
