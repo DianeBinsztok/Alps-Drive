@@ -1,9 +1,13 @@
+const cors = require("cors");
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 8000;
 
-app.get("/", (req, res) => {
-  res.send("Testing nodemon ... Still running?");
+console.log("Le module CORS, c'est ça -> ", cors);
+app.use(cors());
+
+app.get("/api/drive", (req, res) => {
+  res.send("test");
 });
 
 app.listen(port, () => {
