@@ -14,12 +14,21 @@ console.log("Le module CORS, c'est ça -> ", cors);
 /*app.get("/", (req, res) => {
   res.send("Welcome");
 });*/
-
 app.get("/api/drive", (req, res) => {
-  res.send("Welcome");
+  res.send([
+    {
+      name: "Personnel",
+      isFolder: true,
+    },
+    {
+      name: "avis imposition",
+      size: 1337,
+      isFolder: false,
+    },
+  ]);
 });
 
-app.post("/api/drive/:name", (req, res) => {
+app.post("/:name", (req, res) => {
   const foldername = req.params.name;
   if (!foldername) {
     res.end();
