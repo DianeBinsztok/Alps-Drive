@@ -20,10 +20,17 @@ async function getAllContent(contentPath) {
   const results = [];
   const files = await fs.readdir(contentPath, { withFileTypes: true });
   files.forEach((file) => {
-    results.push({
-      name: file.name,
-      isFolder: true,
-    });
+    if (file.isDirectory()) {
+      results.push({
+        name: file.name,
+        isFolder: true,
+      });
+    } else {
+      results.push({
+        name: file.name,
+        isFolder: false,
+      });
+    }
   });
   return results;
 }
