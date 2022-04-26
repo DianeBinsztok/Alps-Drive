@@ -1,28 +1,46 @@
-// Aller chercher le contenu de randomFolders
-async function getAllContent(contentPath) {
-  const results = [];
-  const files = await fs.readdir(contentPath, { withFileTypes: true });
+//const { Dirent } = require("fs");
+import { Dirent } from "fs";
+//const fs = require("fs/promises");
+import fs from "fs/promises";
 
-  files.map(async (file) => {
-    if (file.isDirectory()) {
-      results.push({
-        name: file.name,
-        isFolder: true,
-      });
-    } else {
-      results.push({
-        name: file.name,
-        size: 0,
-        isFolder: false,
-      });
-    }
+// Aller chercher tous les dossiers avec fs.readdir, puis map sur les dossier en appelant getOneContent()
+export function getAllContent(contentPath) {
+  return fs.readdir(contentPath, { withFileTypes: true }).then((files) => {
+    console.log("je map sur un fichier: ", files);
+    return (
+      Promise.all(
+        files.map((file) => {
+          const results = getOneContent(file, contentPath);
+          return results;
+        })
+      )
+        // juste pour voir avant de return
+        .then((results) => {
+          console.log("results : ", results);
+          return results;
+        })
+    );
   });
-
-  console.log("Résultat de getAllContent: ", results);
-  return results;
+}
+// Aller chercher les propriété d'un document avec fs.stats
+function getOneContent(file, path) {
+  if (file.isDirectory()) {
+    return {
+      name: file.name,
+      isFolder: true,
+    };
+  } else {
+    return fs.stat(path + "/" + file.name).then((stats) => {
+      return {
+        name: file.name,
+        size: stats.size,
+        isFolder: false,
+      };
+    });
+  }
 }
 //La version synchrone qui ne fonctionne pas (même en rendant le callback d'app.get asynchrone)
-function getAllContent2(contentPath) {
+export function getAllContent2(contentPath) {
   fs.readdir(contentPath, { withFileTypes: true }, (error, files) => {
     if (error) {
       console.error(
@@ -53,12 +71,12 @@ function getAllContent2(contentPath) {
   });
 }
 // Aller chercher la stat size de chaque fichier
-async function getFileSize(filePath) {
+export async function getFileSize(filePath) {
   const fileSize = await fs.stat(filePath);
   return fileSize.size;
 }
 // Reparcourir les documents et ajouter la prop size au besoin
-async function addFileSize(files, contentPath) {
+export async function addFileSize(files, contentPath) {
   files.forEach(async (file) => {
     if (!file.isFolder) {
       await fs
