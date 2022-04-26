@@ -17,14 +17,13 @@ app.use(cors());
 const targetPath = "./randomFolders";
 
 app.get("/api/drive", (req, res) => {
-  getAllContent(targetPath)
-    /*
-    .then((files) => {
-      addFileSize(files);
-    })*/
-    .then((result) => {
-      res.send(result);
-    });
+  getAllContent(targetPath).then((result) => {
+    res.send(result);
+  });
+});
+
+app.get("/api/drive/:name", (req, res) => {
+  console.log(req.params.name);
 });
 
 app.listen(port, () => {
