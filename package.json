@@ -6,7 +6,7 @@
   "type":"module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --inspect main.js"
+    "dev": "nodemon --inspect-brk main.js"
   },
   "repository": {
     "type": "git",

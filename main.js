@@ -5,7 +5,7 @@ import cors from "cors";
 import express from "express";
 
 //const { getAllContent, getFileSize, addFileSize } = require("./functions");
-import { getAllContent, getFileSize, addFileSize } from "./functions.js";
+import { getAllDocuments, getOneDocument } from "./functions.js";
 const app = express();
 const port = 3000;
 
@@ -17,13 +17,16 @@ app.use(cors());
 const targetPath = "./randomFolders";
 
 app.get("/api/drive", (req, res) => {
-  getAllContent(targetPath).then((result) => {
+  getAllDocuments(targetPath).then((result) => {
+    console.log("results : ", result);
     res.send(result);
   });
 });
 
 app.get("/api/drive/:name", (req, res) => {
-  console.log(req.params.name);
+  getOneDocument(targetPath, req.params.name).then((result) => {
+    res.send(result);
+  });
 });
 
 app.listen(port, () => {
